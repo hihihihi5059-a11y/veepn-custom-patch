@@ -37,5 +37,4 @@ jobs:
           tag_name: v1.0.${{ github.run_number }}
           name: VeePN Patch
           files: |
-            builder/build/**/*.jar
-            builder/build/**/*.json
+            builder/build/libs/*.jar

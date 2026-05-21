@@ -1,0 +1,36 @@
+name: Auto Build Patch
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          path: my-code
+      - name: Prepare Build Environment
+        run: git clone https://github.com/ReVanced/revanced-patches-template.git builder
+      - name: Inject Kotlin Code
+        run: cp -r my-code/src/main/kotlin/* builder/src/main/kotlin/
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build Patches
+        working-directory: builder
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: VeePN Patch
+          files: |
+            builder/build/**/*.jar
+            builder/build/**/*.json

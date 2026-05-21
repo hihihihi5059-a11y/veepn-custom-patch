@@ -17,8 +17,8 @@ jobs:
         run: git clone https://github.com/ReVanced/revanced-patches-template.git builder
       - name: Inject Kotlin Code
         run: |
-          mkdir -p builder/src/main/kotlin
-          cp -r my-code/src/main/kotlin/* builder/src/main/kotlin/
+          mkdir -p builder/patches/src/main/kotlin
+          cp -r my-code/src/main/kotlin/* builder/patches/src/main/kotlin/
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
@@ -31,8 +31,8 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build
-          find . -name "*.jar" -exec cp {} ../ \;
-          find . -name "*.json" -exec cp {} ../ \;
+          find patches/build/ -name "*.jar" -exec cp {} ../ \;
+          find patches/build/ -name "*.json" -exec cp {} ../ \;
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
